@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-Regular_2') format('woff2');
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-Medium_2') format('woff2');
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-SemiBold_2') format('woff2');
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-Bold_2') format('woff2');
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('https://static.figma.com/font/BarlowCondensed-ExtraBold_2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://static.figma.com/font/JetBrainsMono_wght__1') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://static.figma.com/font/JetBrainsMono_wght__1') format('woff2');
+}
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-pitch: #080b14;
+  --color-pitch-card: #0f1422;
+  --color-pitch-border: #1e2537;
+  --color-lime: #c3f53c;
+  --color-lime-dim: #9ec52f;
+  --color-live: #ff2d55;
+  --color-muted: #6b7a99;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #1e2537 transparent;
+}
+
+body {
+  background-color: #080b14;
+  color: #e8edf8;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #1e2537; border-radius: 3px; }
+
+.font-display { font-family: 'Barlow Condensed', sans-serif; }
+.font-mono-data { font-family: 'JetBrains Mono', monospace; }
