@@ -7,15 +7,11 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(), // Tailwind v4 plugin continuous processing ke liye
+    tailwindcss(),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'), // '@' alias support
+      '@': path.resolve(__dirname, './src'),
     },
-  },
-  server: {
-    host: '0.0.0.0',
-    port: 8443, // Figma Make environment default port
   },
 })
