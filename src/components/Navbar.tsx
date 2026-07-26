@@ -15,16 +15,16 @@ export default function Navbar() {
   return (
     <header style={{ backgroundColor: "#080b14", borderBottom: "1px solid #1e2537" }} className="sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
-        {/* Logo */}
+        {/* GoalGrid Logo */}
         <NavLink to="/" className="flex items-center gap-2 shrink-0">
           <div
             className="w-8 h-8 rounded flex items-center justify-center text-[#080b14] font-bold text-sm"
             style={{ backgroundColor: "#c3f53c", fontFamily: "Barlow Condensed, sans-serif", fontSize: "1.1rem", fontWeight: 800 }}
           >
-            FC
+            GG
           </div>
           <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#e8edf8", letterSpacing: "0.04em" }}>
-            PITCH<span style={{ color: "#c3f53c" }}>WIRE</span>
+            GOAL<span style={{ color: "#c3f53c" }}>GRID</span>
           </span>
         </NavLink>
 

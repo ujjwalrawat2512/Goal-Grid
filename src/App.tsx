@@ -11,7 +11,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <div style={{ minHeight: "100vh", backgroundColor: "#080b14" }}>
+        {/* Navigation Bar */}
         <Navbar />
+
+        {/* Page Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/live" element={<Live />} />
@@ -21,23 +24,31 @@ export default function App() {
           <Route path="/news/:id" element={<Article />} />
         </Routes>
 
-        {/* Footer */}
+        {/* GoalGrid Custom Footer */}
         <footer className="mt-16 py-8 border-t" style={{ backgroundColor: "#080b14", borderColor: "#1e2537" }}>
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            {/* Logo & Website Name */}
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-[#080b14]" style={{ backgroundColor: "#c3f53c", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800 }}>
-                FC
+              <div 
+                className="w-7 h-7 rounded flex items-center justify-center text-xs font-black text-[#080b14]" 
+                style={{ backgroundColor: "#c3f53c", fontFamily: "Barlow Condensed, sans-serif" }}
+              >
+                GG
               </div>
-              <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#e8edf8", letterSpacing: "0.04em" }}>
-                PITCH<span style={{ color: "#c3f53c" }}>WIRE</span>
+              <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: "1.1rem", color: "#e8edf8", letterSpacing: "0.05em" }}>
+                GOAL<span style={{ color: "#c3f53c" }}>GRID</span>
               </span>
             </div>
+
+            {/* Footer Links & Copyright */}
             <div className="flex gap-6 text-xs" style={{ color: "#6b7a99", fontFamily: "JetBrains Mono, monospace" }}>
-              <span>© 2025 PitchWire</span>
-              <span>Privacy</span>
-              <span>Terms</span>
-              <span>Contact</span>
+              <span>© {new Date().getFullYear()} GoalGrid</span>
+              <a href="#privacy" className="hover:text-white transition-colors">Privacy</a>
+              <a href="#terms" className="hover:text-white transition-colors">Terms</a>
+              <a href="#contact" className="hover:text-white transition-colors">Contact</a>
             </div>
+
           </div>
         </footer>
       </div>
