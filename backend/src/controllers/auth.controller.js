@@ -74,7 +74,7 @@ const loginUser = asyncHandler(async(req,res)=> {
         throw new apiError(400,"User does not exist")
     }
     const isPasswordValid = await bcrypt.compare(password,user.password)
-    if(isPasswordValid){
+    if(!isPasswordValid){
         throw new apiError(400,"password is incorrect")
     }
     const token = generateToken(user._id)
@@ -94,3 +94,5 @@ const getUsers = asyncHandler(async(req,res)=> {
          new apiResponse(200,users,"ALL users fetched Successfully")
     )
 })
+
+export {registerUser,loginUser,getUsers}
