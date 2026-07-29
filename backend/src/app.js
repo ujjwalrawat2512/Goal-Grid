@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -16,6 +17,8 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 //ROUTES
+import authRouter from "./routes/auth.route.js"
 
+app.use('/api/auth',authRouter)
 
 export default app
