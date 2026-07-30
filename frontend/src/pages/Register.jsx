@@ -1,66 +1,118 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 
-export const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Register = () => {
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // State for register inputs (auth.controller.js ke req.body keys ke hisaab se)
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Handle Input Changes
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Handle Form Submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registering:', name, email, password);
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/api/auth/register',
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+
+      console.log('Registration Successful:', response.data);
+      alert('Registration Successful! Ab login kar sakte ho.');
+      
+      // Redirecting to Login
+      navigate('/login');
+    } catch (err) {
+      console.error('Registration Error:', err);
+      setError(
+        err.response?.data?.message || 'Registration failed! Try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
-          <div className="brand-logo" style={{ margin: '0 auto 1rem auto' }}>GG</div>
-          <h2>Create Account</h2>
-          <p>Join GoalGrid for real-time football insights</p>
-        </div>
+        <h2>GoalGrid</h2>
+        <h3>Create Account</h3>
+
+        {error && <div className="error-banner">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label>Full Name</label>
-            <input 
-              type="text" 
-              placeholder="Ujjwal Singh" 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required 
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Choose a username"
+              value={formData.username}
+              onChange={handleChange}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Email Address</label>
-            <input 
-              type="email" 
-              placeholder="name@example.com" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required 
+            <label htmlFor="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Create a strong password"
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
 
-          <button type="submit" className="auth-btn">Create Account</button>
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? 'Creating Account...' : 'Register'}
+          </button>
         </form>
 
         <p className="auth-redirect">
-          Already have an account? <a href="#login">Login here</a>
+          Pehle se account hai? <Link to="/login">Login here</Link>
         </p>
       </div>
     </div>
   );
 };
+
 export default Register;

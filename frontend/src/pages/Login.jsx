@@ -1,54 +1,108 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 
-export const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = () => {
+  const navigate = useNavigate();
+  
+  // State for form inputs
+  const [formData, setFormData] = useState({
+    email: '',    // Agar backend 'username' expect kar raha hai, to ise 'username' kar dena
+    password: ''
+  });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Handle Input Changes
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Handle Form Submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', email, password);
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/api/auth/login', // Backend Port check kar lena (e.g. 5000 ya 8000)
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true // JWT Cookie receive karne ke liye
+        }
+      );
+
+      console.log('Login Successful:', response.data);
+      
+      // User data store kar lo local storage mein
+      if (response.data?.data) {
+        localStorage.setItem('user', JSON.stringify(response.data.data));
+      }
+
+      alert('Login Successful!');
+      navigate('/dashboard'); // Login hone ke baad navigation
+    } catch (err) {
+      console.error('Login Error:', err);
+      setError(
+        err.response?.data?.message || 'Invalid Credentials! Phir se try karo.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
-          <div className="brand-logo" style={{ margin: '0 auto 1rem auto' }}>GG</div>
-          <h2>Welcome Back</h2>
-          <p>Login to your GoalGrid account</p>
-        </div>
+        <h2>GoalGrid</h2>
+        <h3>Welcome Back!</h3>
+        
+        {error && <div className="error-banner">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label>Email Address</label>
-            <input 
-              type="email" 
-              placeholder="name@example.com" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required 
+            <label htmlFor="email">Email / Username</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Enter your email or username"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
 
-          <button type="submit" className="auth-btn">Sign In</button>
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         <p className="auth-redirect">
-          Don't have an account? <a href="#register">Register here</a>
+          Account nahi hai? <Link to="/register">Register here</Link>
         </p>
       </div>
     </div>
   );
 };
+
 export default Login;
