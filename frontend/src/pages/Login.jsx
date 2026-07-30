@@ -30,7 +30,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/auth/login', // Backend Port check kar lena (e.g. 5000 ya 8000)
+        'http://localhost:3000/api/auth/login', // Backend Port check kar lena (e.g. 5000 ya 8000)
         formData,
         {
           headers: { 'Content-Type': 'application/json' },

@@ -31,7 +31,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/auth/register',
+        'http://localhost:3000/api/auth/register',
         formData,
         {
           headers: { 'Content-Type': 'application/json' },

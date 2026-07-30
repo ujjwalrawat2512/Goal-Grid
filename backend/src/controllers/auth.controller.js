@@ -22,10 +22,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existingUser) {
     throw new apiError(400, "User already exists");
   }
+   console.log("Original Password:", password);
 
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
-
+  console.log("Immediate Compare:", await bcrypt.compare(password, hashPassword));
   const user = await User.create({
     username,
     email,
@@ -66,6 +67,8 @@ The GoalGrid Team
 
 const loginUser = asyncHandler(async(req,res)=> {
     const{email,password} = req.body
+    console.log("Request Body:", req.body);
+
     if(!email || !password){
         throw new apiError(401,"all fields are required")
     }
@@ -73,10 +76,20 @@ const loginUser = asyncHandler(async(req,res)=> {
     if(!user){
         throw new apiError(400,"User does not exist")
     }
-    const isPasswordValid = await bcrypt.compare(password,user.password)
-    if(!isPasswordValid){
-        throw new apiError(400,"password is incorrect")
-    }
+    console.log("User Found:", user?.email);
+
+console.log("Entered Password:", password);
+console.log("Stored Hash:", user.password);
+
+const isPasswordValid = await bcrypt.compare(password, user.password);
+
+console.log("Password Match:", isPasswordValid);
+
+if (!isPasswordValid) {
+    throw new apiError(400, "password is incorrect");
+}
+    
+
     const token = generateToken(user._id)
     const loggedInUser = await User.findById(user._id).select("-password")
     return res
