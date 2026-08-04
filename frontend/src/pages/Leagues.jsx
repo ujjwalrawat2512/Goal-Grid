@@ -1,4 +1,3 @@
-import React from 'react';
 
 const leaguesData = [
   { id: 1, name: 'Premier League', country: 'England', teams: 20, logo: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },

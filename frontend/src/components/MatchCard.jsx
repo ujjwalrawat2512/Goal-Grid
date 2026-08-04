@@ -1,22 +1,28 @@
-import React from 'react';
+
+const getInitials = (name = '') =>
+  name
+    .split(' ')
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
 
 const MatchCard = ({ match }) => {
-  // Default fallback data agar props paas na ho
   const {
     league = 'Premier League',
     homeTeam = 'Real Madrid',
     awayTeam = 'Barcelona',
     homeScore = 2,
     awayScore = 1,
-    status = 'LIVE', // 'LIVE', 'FT', या '19:30' (upcoming time)
+    status = 'LIVE', // 'LIVE', 'FT', or an upcoming kickoff time like '19:30'
     minute = "67'",
   } = match || {};
 
   const isLive = status === 'LIVE';
+  const isUpcoming = status === 'UPCOMING' || (!isLive && status !== 'FT' && status !== 'FINISHED');
 
   return (
     <div className="match-card">
-      {/* Match Header: League & Status */}
       <div className="match-header">
         <span className="match-league">{league}</span>
         {isLive ? (
@@ -29,27 +35,24 @@ const MatchCard = ({ match }) => {
         )}
       </div>
 
-      {/* Teams and Score Section */}
       <div className="match-body">
-        {/* Home Team */}
         <div className="team-row">
           <div className="team-info">
-            <div className="team-logo-placeholder"></div>
+            <div className="team-logo-placeholder">{getInitials(homeTeam)}</div>
             <span className="team-name">{homeTeam}</span>
           </div>
           <span className={`score ${isLive ? 'score-active' : ''}`}>
-            {homeScore}
+            {isUpcoming ? '-' : homeScore}
           </span>
         </div>
 
-        {/* Away Team */}
         <div className="team-row">
           <div className="team-info">
-            <div className="team-logo-placeholder"></div>
+            <div className="team-logo-placeholder">{getInitials(awayTeam)}</div>
             <span className="team-name">{awayTeam}</span>
           </div>
           <span className={`score ${isLive ? 'score-active' : ''}`}>
-            {awayScore}
+            {isUpcoming ? '-' : awayScore}
           </span>
         </div>
       </div>

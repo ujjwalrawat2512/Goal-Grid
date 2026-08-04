@@ -1,7 +1,13 @@
-import React from 'react';
 import { Hero } from '../components/Hero';
 import { Sidebar } from '../components/Sidebar';
 import { NewsCard } from '../components/NewsCard';
+import MatchCard from '../components/MatchCard';
+
+const featuredMatches = [
+  { id: 1, league: 'Premier League', homeTeam: 'Arsenal', awayTeam: 'Chelsea', homeScore: 2, awayScore: 1, status: 'LIVE', minute: "74'" },
+  { id: 2, league: 'La Liga', homeTeam: 'Real Madrid', awayTeam: 'Barcelona', homeScore: 0, awayScore: 0, status: 'UPCOMING' },
+  { id: 3, league: 'Serie A', homeTeam: 'Inter Milan', awayTeam: 'Juventus', homeScore: 1, awayScore: 1, status: 'LIVE', minute: "52'" },
+];
 
 const sampleNews = [
   {
@@ -26,6 +32,19 @@ export const Home = () => {
   return (
     <div className="home-page">
       <Hero />
+
+      <section id="live" className="live-preview-section">
+        <h2 className="section-title">
+          <span className="title-indicator"></span>
+          Live &amp; Upcoming Matches
+        </h2>
+        <div className="match-preview-grid">
+          {featuredMatches.map((match) => (
+            <MatchCard key={match.id} match={match} />
+          ))}
+        </div>
+      </section>
+
       <div className="home-grid">
         <section className="news-section">
           <h2 className="section-title">

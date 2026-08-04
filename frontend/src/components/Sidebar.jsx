@@ -1,4 +1,3 @@
-import React from 'react';
 
 const topLeagues = [
   { id: 1, name: 'Premier League', country: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 England', matches: 3 },
@@ -34,7 +33,12 @@ export const Sidebar = () => {
       <div className="sidebar-card highlight">
         <h4>⚡ Quick Match Alert</h4>
         <p>Real Madrid vs Barcelona starts in 45 minutes!</p>
-        <button className="sidebar-action-btn">Set Reminder</button>
+        <button
+          className="sidebar-action-btn"
+          onClick={() => alert('Reminder set! We will notify you before kickoff.')}
+        >
+          Set Reminder
+        </button>
       </div>
     </aside>
   );
