@@ -7,7 +7,10 @@ const app = express()
 
 //CORS AND CONFIGURATION
 app.use(cors({
-    origin : process.env.CORS_ORIGIN,
+    origin : (origin, callback) => {
+        // Allow request from any local dev origin with credentials
+        callback(null, true);
+    },
     credentials : true,
 }))
 

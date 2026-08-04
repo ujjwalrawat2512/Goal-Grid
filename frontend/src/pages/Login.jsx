@@ -46,7 +46,7 @@ const Login = () => {
       }
 
       alert('Login Successful!');
-      navigate('/dashboard'); // Login hone ke baad navigation
+      navigate('/'); // Redirect to Home page after successful login
     } catch (err) {
       console.error('Login Error:', err);
       setError(

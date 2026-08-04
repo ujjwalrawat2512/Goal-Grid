@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
-const connectToDB = async() =>{
+const connectToDB = async() => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI)
-        console.log("Connected to DB");
+        const dbUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/goalgrid";
+        await mongoose.connect(dbUri);
+        console.log("Connected to MongoDB successfully");
     } catch (error) {
-        console.log(error)
+        console.error("MongoDB Connection Error:", error.message);
     }
 }
 export {connectToDB}

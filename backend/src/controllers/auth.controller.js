@@ -7,7 +7,8 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 const generateToken = (id) => {
-   return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"3d"})
+   const secret = process.env.JWT_SECRET || "goalgrid_secret_key_2026_super_secure";
+   return jwt.sign({id}, secret, {expiresIn:"3d"});
 }
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -17,24 +18,27 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new apiError(400, "All fields are required");
   }
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({
+    $or: [{ email: email.toLowerCase() }, { username: username.toLowerCase() }]
+  });
 
   if (existingUser) {
-    throw new apiError(400, "User already exists");
+    throw new apiError(400, "User with this email or username already exists");
   }
-   console.log("Original Password:", password);
 
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
-  console.log("Immediate Compare:", await bcrypt.compare(password, hashPassword));
+  
   const user = await User.create({
-    username,
-    email,
+    username: username.toLowerCase(),
+    email: email.toLowerCase(),
     password: hashPassword,
   });
 
   if (user) {
-    const message = `
+    try {
+      if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        const message = `
 Hi ${username},
 
 🎉 Welcome to GoalGrid!
@@ -45,12 +49,11 @@ Thank you for joining GoalGrid!
 Best regards,
 The GoalGrid Team
 `;
-
-    await sendEmail(
-      email,
-      "🎉 Welcome to GoalGrid!",
-      message
-    );
+        await sendEmail(email, "🎉 Welcome to GoalGrid!", message);
+      }
+    } catch (emailErr) {
+      console.error("Welcome email notice (non-fatal):", emailErr.message);
+    }
   }
 
   const createdUser = await User.findById(user._id).select("-password");
@@ -66,37 +69,38 @@ The GoalGrid Team
 });
 
 const loginUser = asyncHandler(async(req,res)=> {
-    const{email,password} = req.body
-    console.log("Request Body:", req.body);
+    const { email, username, password } = req.body;
+    const loginIdentifier = email || username;
 
-    if(!email || !password){
-        throw new apiError(401,"all fields are required")
+    if (!loginIdentifier || !password) {
+        throw new apiError(400, "All fields are required");
     }
-    const user = await User.findOne({email})
-    if(!user){
-        throw new apiError(400,"User does not exist")
+
+    const user = await User.findOne({
+        $or: [
+            { email: loginIdentifier.toLowerCase() },
+            { username: loginIdentifier.toLowerCase() }
+        ]
+    });
+
+    if (!user) {
+        throw new apiError(400, "User does not exist");
     }
-    console.log("User Found:", user?.email);
 
-console.log("Entered Password:", password);
-console.log("Stored Hash:", user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new apiError(400, "Password is incorrect");
+    }
 
-console.log("Password Match:", isPasswordValid);
+    const token = generateToken(user._id);
+    const loggedInUser = await User.findById(user._id).select("-password");
 
-if (!isPasswordValid) {
-    throw new apiError(400, "password is incorrect");
-}
-    
-
-    const token = generateToken(user._id)
-    const loggedInUser = await User.findById(user._id).select("-password")
     return res
     .status(200)
     .json(
-        new apiResponse(200,{user:loggedInUser,token},"User logged in Successfully")
-    )
+        new apiResponse(200, { user: loggedInUser, token }, "User logged in successfully")
+    );
 })
 
 const getUsers = asyncHandler(async(req,res)=> {
