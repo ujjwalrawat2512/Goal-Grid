@@ -26,4 +26,16 @@ import userRouter from "./routes/user.route.js"
 app.use('/api/auth',authRouter)
 app.use('/api/user',userRouter)
 
+// ====== Global Error Handler ======
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Something went wrong";
+    return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+        errors: err.errors || []
+    });
+});
+
 export default app
